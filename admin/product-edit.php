@@ -47,7 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             } catch (PDOException $ex) {
                 $msg = $ex->getMessage();
-                $flashError = (stripos($msg, 'duplicate') !== false || stripos($msg, 'unique') !== false) ? 'That slug is already used. Choose another.' : 'Could not save. Check your inputs.';
+                error_log('Product save failed: ' . $msg);
+                $flashError = (stripos($msg, 'duplicate') !== false || stripos($msg, 'unique') !== false) ? 'That slug is already used. Choose another.' : ('Could not save: ' . $msg);
             }
         }
         $product = array_merge($product, $_POST);
