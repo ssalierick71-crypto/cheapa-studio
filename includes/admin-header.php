@@ -53,7 +53,10 @@ try { $newOrderCount = (int)$pdo->query("SELECT COUNT(*) FROM orders WHERE statu
   <main class="admin-content">
     <div class="admin-topbar">
       <h1><?= isset($adminTitle) ? e($adminTitle) : 'Dashboard' ?></h1>
-      <?php if (!empty($adminAction)) echo $adminAction; ?>
+      <div class="topbar-actions">
+        <a href="<?= SITE_URL ?>/" class="btn btn-ghost btn-sm"><i class="bi bi-arrow-left"></i> Back to site</a>
+        <?php if (!empty($adminAction)) echo $adminAction; ?>
+      </div>
     </div>
 
     <?php if (!empty($_GET['ok'])): ?>
