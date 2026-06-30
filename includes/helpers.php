@@ -11,6 +11,7 @@ function storage_driver(): string {
 
 /** PUT a file into Supabase Storage. Returns true on success. */
 function sb_storage_put(string $path, string $tmpFile, string $mime): bool {
+    $key = (string)env('SUPABASE_SERVICE_KEY');
     $url = rtrim((string)env('SUPABASE_URL'), '/') . '/storage/v1/object/' . env('SUPABASE_BUCKET', 'cheapa') . '/' . $path;
     $ch = curl_init($url);
     curl_setopt_array($ch, [
@@ -18,25 +19,35 @@ function sb_storage_put(string $path, string $tmpFile, string $mime): bool {
         CURLOPT_POSTFIELDS    => file_get_contents($tmpFile),
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_HTTPHEADER    => [
-            'Authorization: Bearer ' . env('SUPABASE_SERVICE_KEY'),
+            'apikey: ' . $key,
+            'Authorization: Bearer ' . $key,
             'Content-Type: ' . $mime,
             'x-upsert: true',
         ],
     ]);
-    curl_exec($ch);
-    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $resp = curl_exec($ch);
+    $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $err  = curl_error($ch);
     curl_close($ch);
-    return $code >= 200 && $code < 300;
+    if ($code < 200 || $code >= 300) {
+        error_log("Supabase storage upload failed (HTTP {$code}) for '{$path}': " . ($err ?: $resp));
+        return false;
+    }
+    return true;
 }
 
 /** DELETE a file from Supabase Storage. */
 function sb_storage_delete(string $path): void {
+    $key = (string)env('SUPABASE_SERVICE_KEY');
     $url = rtrim((string)env('SUPABASE_URL'), '/') . '/storage/v1/object/' . env('SUPABASE_BUCKET', 'cheapa') . '/' . $path;
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_CUSTOMREQUEST => 'DELETE',
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER    => ['Authorization: Bearer ' . env('SUPABASE_SERVICE_KEY')],
+        CURLOPT_HTTPHEADER    => [
+            'apikey: ' . $key,
+            'Authorization: Bearer ' . $key,
+        ],
     ]);
     curl_exec($ch);
     curl_close($ch);
