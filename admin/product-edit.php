@@ -46,7 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: ' . SITE_URL . '/admin/products.php?ok=' . rawurlencode('Product saved'));
                 exit;
             } catch (PDOException $ex) {
-                $flashError = (strpos($ex->getMessage(), 'Duplicate') !== false) ? 'That slug is already used. Choose another.' : 'Could not save. Check your inputs.';
+                $msg = $ex->getMessage();
+                $flashError = (stripos($msg, 'duplicate') !== false || stripos($msg, 'unique') !== false) ? 'That slug is already used. Choose another.' : 'Could not save. Check your inputs.';
             }
         }
         $product = array_merge($product, $_POST);

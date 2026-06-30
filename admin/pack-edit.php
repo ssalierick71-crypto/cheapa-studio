@@ -45,7 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: ' . SITE_URL . '/admin/packs.php?ok=' . rawurlencode('Pack saved'));
                 exit;
             } catch (PDOException $ex) {
-                $flashError = (strpos($ex->getMessage(), 'Duplicate') !== false) ? 'That slug is already used. Choose another.' : 'Could not save. Check your inputs.';
+                $msg = $ex->getMessage();
+                $flashError = (stripos($msg, 'duplicate') !== false || stripos($msg, 'unique') !== false) ? 'That slug is already used. Choose another.' : 'Could not save. Check your inputs.';
             }
         }
         $pack = array_merge($pack, $_POST);
