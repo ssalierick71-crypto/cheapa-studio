@@ -26,10 +26,10 @@ include 'includes/header.php';
       <div class="case-card">
         <div class="case-ba">
           <div class="case-before"><span class="ba-tag">Before</span>
-            <?php if ($bi = img_url('portfolio', $c['before_image'])): ?><img src="<?= e($bi) ?>" alt="Before" loading="lazy"><?php else: ?><i class="bi bi-emoji-frown" style="font-size:34px"></i><?php endif; ?>
+            <?php if ($bi = img_url('portfolio', $c['before_image'])): ?><img class="zoomable" src="<?= e($bi) ?>" alt="<?= e($c['title']) ?> — before" loading="lazy"><?php else: ?><i class="bi bi-emoji-frown" style="font-size:34px"></i><?php endif; ?>
           </div>
           <div class="case-after"><span class="ba-tag">After</span>
-            <?php if ($ai = img_url('portfolio', $c['after_image'])): ?><img src="<?= e($ai) ?>" alt="After" loading="lazy"><?php else: ?><i class="bi bi-emoji-sunglasses" style="font-size:34px"></i><?php endif; ?>
+            <?php if ($ai = img_url('portfolio', $c['after_image'])): ?><img class="zoomable" src="<?= e($ai) ?>" alt="<?= e($c['title']) ?> — after" loading="lazy"><?php else: ?><i class="bi bi-emoji-sunglasses" style="font-size:34px"></i><?php endif; ?>
           </div>
         </div>
         <div class="case-body">

@@ -66,6 +66,13 @@
 <?php include __DIR__ . '/bottom-nav.php'; ?>
 
 </div><!-- /#page-wrap -->
+
+<!-- Image lightbox (click any .zoomable image to view it full) -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lightbox-close" type="button" aria-label="Close">&times;</button>
+  <img class="lightbox-img" id="lightbox-img" src="" alt="">
+</div>
+
 <script src="<?= SITE_URL ?>/assets/js/main.js"></script>
 </body>
 </html>

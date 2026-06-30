@@ -480,6 +480,37 @@
     openShareSheet(url, title);
   });
 
+  /* ---------- image lightbox ---------- */
+  const lb    = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  if (lb && lbImg) {
+    const openLightbox = src => {
+      lbImg.src = src;
+      lb.classList.add('open');
+      lb.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';   // stop background scroll
+    };
+    const closeLightbox = () => {
+      lb.classList.remove('open');
+      lb.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    };
+    // open when any zoomable image is clicked
+    document.addEventListener('click', e => {
+      const img = e.target.closest('img.zoomable');
+      if (!img) return;
+      e.preventDefault();
+      openLightbox(img.currentSrc || img.src);
+    });
+    // close on X, on the image, or on the dark backdrop
+    lb.addEventListener('click', closeLightbox);
+    // close on Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && lb.classList.contains('open')) closeLightbox();
+    });
+  }
+
   /* ---------- util ---------- */
   function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 })();
