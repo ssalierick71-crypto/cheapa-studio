@@ -1,0 +1,11 @@
+# Cheapa Studio — Apache config
+ErrorDocument 404 /Cheapa_Studio/404.php
+
+# Block directory listings
+Options -Indexes
+
+# Basic security headers
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>

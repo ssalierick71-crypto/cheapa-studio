@@ -1,0 +1,4 @@
+# Allow images to be served, but never execute scripts from uploads.
+<FilesMatch "\.(php|php5|phtml|pl|py|cgi|sh)$">
+  Require all denied
+</FilesMatch>
