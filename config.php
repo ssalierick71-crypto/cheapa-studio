@@ -69,8 +69,15 @@ define('UPLOADS_DIR', __DIR__ . '/uploads/');
 define('UPLOADS_URL', SITE_URL . '/uploads/');
 
 // ── Security hardening ──────────────────────────────────────
-// Don't advertise the exact PHP version in response headers.
-if (!headers_sent()) { header_remove('X-Powered-By'); }
+// Response security headers (set in PHP so they work on any host —
+// Vercel ignores .htaccess). Skip on CLI and if output already started.
+if (PHP_SAPI !== 'cli' && !headers_sent()) {
+    header_remove('X-Powered-By');                       // hide PHP version
+    header('X-Content-Type-Options: nosniff');
+    header('X-Frame-Options: SAMEORIGIN');               // anti-clickjacking
+    header('Referrer-Policy: strict-origin-when-cross-origin');
+    header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
+}
 // Lock down session cookies (before any session_start()).
 if (session_status() === PHP_SESSION_NONE) {
     ini_set('session.cookie_httponly', '1');           // JS can't read the cookie
