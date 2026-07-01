@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: ' . SITE_URL . '/admin/index.php');
         exit;
     }
+    sleep(1); // throttle brute-force password guessing
     $error = 'Invalid username or password.';
 }
 ?>

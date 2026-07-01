@@ -68,6 +68,17 @@ define('SITE_ORIGIN', $__scheme . '://' . $__host);   // scheme + host only
 define('UPLOADS_DIR', __DIR__ . '/uploads/');
 define('UPLOADS_URL', SITE_URL . '/uploads/');
 
+// ── Security hardening ──────────────────────────────────────
+// Don't advertise the exact PHP version in response headers.
+if (!headers_sent()) { header_remove('X-Powered-By'); }
+// Lock down session cookies (before any session_start()).
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_httponly', '1');           // JS can't read the cookie
+    ini_set('session.cookie_samesite', 'Lax');         // basic CSRF hardening
+    ini_set('session.use_strict_mode', '1');           // reject unknown session ids
+    if ($__scheme === 'https') ini_set('session.cookie_secure', '1'); // HTTPS-only
+}
+
 /** Absolute URL of the current request (for share links + og:url). */
 function current_url(): string {
     return SITE_ORIGIN . ($_SERVER['REQUEST_URI'] ?? '/');
